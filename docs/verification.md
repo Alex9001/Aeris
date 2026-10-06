@@ -207,3 +207,21 @@ rebuilt About dialog were visually reviewed. The AppImage desktop icon matches
 the new artwork. The focused About test and packaged X11/Wayland startup smoke
 tests pass. Platform artwork is prepared for Windows/macOS; native binaries for
 those platforms were not rebuilt. Release metadata and checksums were refreshed.
+
+## High-resolution interface gallery
+
+Replaced the four older previews with ten lossless PNG screenshots across all
+nine themes and all three layouts. Light/Compact is the README's primary image;
+the drag insertion and older copy-feedback screenshots were removed. Every
+sample account is `user@example.com`, backed by synthetic secrets only.
+
+The capture harness uses isolated Xvfb/Openbox sessions with native titlebars
+and Qt's 2× display scale. Images are 2008 × 1360 or 2008 × 1680 pixels, captured
+directly from the desktop without upscaling. All ten images were checked for
+valid decoding, dimensions and complete titlebars; themes, text and layouts
+were visually reviewed. Reproduction is documented in `docs/interface.md` and
+`scripts/screenshots-linux.sh`. No application behavior or production vault data
+was changed.
+
+All six local CTest suites pass after the capture-harness changes. Lizard and
+clang-tidy complexity checks, PNG validation and README link/render checks pass.

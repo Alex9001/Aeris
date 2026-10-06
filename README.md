@@ -26,9 +26,9 @@
   <a href="https://github.com/Alex9001/Aeris/issues">Issues</a>
 </p>
 
-![Aeris in Dark Cards view, showing service logos, countdowns, and inline copy feedback](docs/screenshots/dark-cards.png)
+![Aeris in Light theme and Compact layout, with a native titlebar and synthetic user@example.com accounts](docs/screenshots/light-compact.png)
 
-<p align="center"><sub>The actual desktop app. All accounts and codes pictured use synthetic test data.</sub></p>
+<p align="center"><sub>Light theme · Compact layout · Native Linux titlebar. Captured at 2× display scale; click an image for full resolution. All accounts use user@example.com and synthetic test secrets.</sub></p>
 
 ## Find it. Copy it. Get back to work.
 
@@ -58,11 +58,28 @@ Use the layout buttons or **Ctrl/Cmd+1–3** to switch views. The **Theme** menu
 Choose System, Light, Dark, Midnight, Ocean, Forest, Violet, Rose, or Paper. All three layouts share the same accounts, service logos, countdowns, and copy feedback.
 
 <table>
-  <tr><th width="50%">Paper · Compact</th><th width="50%">Drag to reorder</th></tr>
+  <tr><th width="50%">Light · Cards</th><th width="50%">Dark · Cards</th></tr>
   <tr>
-    <td><a href="docs/screenshots/paper-compact.png"><img src="docs/screenshots/paper-compact.png" alt="Aeris Compact layout in the Paper theme"></a></td>
-    <td><a href="docs/screenshots/reorder.png"><img src="docs/screenshots/reorder.png" alt="Dragging an account to its new position with an insertion marker"></a></td>
+    <td><a href="docs/screenshots/light-cards.png"><img src="docs/screenshots/light-cards.png" alt="Aeris Light theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="docs/screenshots/dark-cards.png"><img src="docs/screenshots/dark-cards.png" alt="Aeris Dark theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
   </tr>
+  <tr><th width="50%">Ocean · Cards</th><th width="50%">Violet · Cards</th></tr>
+  <tr>
+    <td><a href="docs/screenshots/ocean-cards.png"><img src="docs/screenshots/ocean-cards.png" alt="Aeris Ocean theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="docs/screenshots/violet-cards.png"><img src="docs/screenshots/violet-cards.png" alt="Aeris Violet theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
+  </tr>
+  <tr><th width="50%">Forest · Compact</th><th width="50%">Paper · Compact</th></tr>
+  <tr>
+    <td><a href="docs/screenshots/forest-compact.png"><img src="docs/screenshots/forest-compact.png" alt="Aeris Forest theme in Compact layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="docs/screenshots/paper-compact.png"><img src="docs/screenshots/paper-compact.png" alt="Aeris Paper theme in Compact layout with native titlebar and synthetic user@example.com accounts"></a></td>
+  </tr>
+  <tr><th width="50%">Midnight · List</th><th width="50%">Rose · List</th></tr>
+  <tr>
+    <td><a href="docs/screenshots/midnight-list.png"><img src="docs/screenshots/midnight-list.png" alt="Aeris Midnight theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="docs/screenshots/rose-list.png"><img src="docs/screenshots/rose-list.png" alt="Aeris Rose theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td>
+  </tr>
+  <tr><th colspan="2">System · List</th></tr>
+  <tr><td colspan="2" align="center"><a href="docs/screenshots/system-list.png"><img src="docs/screenshots/system-list.png" width="680" alt="Aeris System theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td></tr>
 </table>
 
 [Explore the interface →](docs/interface.md)

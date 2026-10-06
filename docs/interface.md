@@ -22,12 +22,49 @@ Explicit aliases include wordpress.org/wordpress.com, MongoDB/monogodb, Fidelity
 
 ## Previews
 
-All accounts in these screenshots are synthetic test data.
+Ten lossless PNG captures show all nine appearance choices and all three layouts.
+The primary view is **Light · Compact**. These are real application captures at
+2× display scale (2008 × 1360 or 2008 × 1680 pixels), including the native Linux/Openbox titlebar, with no image
+upscaling. Every pictured account uses `user@example.com` and synthetic secrets.
+Click any image to inspect its full-resolution original.
 
-![Dark card layout](screenshots/dark-cards.png)
+![Light theme, Compact layout, native titlebar](screenshots/light-compact.png)
 
-![Compact paper theme](screenshots/paper-compact.png)
+<table>
+  <tr><th width="50%">Light · Cards</th><th width="50%">Dark · Cards</th></tr>
+  <tr>
+    <td><a href="screenshots/light-cards.png"><img src="screenshots/light-cards.png" alt="Aeris Light theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="screenshots/dark-cards.png"><img src="screenshots/dark-cards.png" alt="Aeris Dark theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
+  </tr>
+  <tr><th width="50%">Ocean · Cards</th><th width="50%">Violet · Cards</th></tr>
+  <tr>
+    <td><a href="screenshots/ocean-cards.png"><img src="screenshots/ocean-cards.png" alt="Aeris Ocean theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="screenshots/violet-cards.png"><img src="screenshots/violet-cards.png" alt="Aeris Violet theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
+  </tr>
+  <tr><th width="50%">Forest · Compact</th><th width="50%">Paper · Compact</th></tr>
+  <tr>
+    <td><a href="screenshots/forest-compact.png"><img src="screenshots/forest-compact.png" alt="Aeris Forest theme in Compact layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="screenshots/paper-compact.png"><img src="screenshots/paper-compact.png" alt="Aeris Paper theme in Compact layout with native titlebar and synthetic user@example.com accounts"></a></td>
+  </tr>
+  <tr><th width="50%">Midnight · List</th><th width="50%">Rose · List</th></tr>
+  <tr>
+    <td><a href="screenshots/midnight-list.png"><img src="screenshots/midnight-list.png" alt="Aeris Midnight theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="screenshots/rose-list.png"><img src="screenshots/rose-list.png" alt="Aeris Rose theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td>
+  </tr>
+  <tr><th colspan="2">System · List</th></tr>
+  <tr><td colspan="2" align="center"><a href="screenshots/system-list.png"><img src="screenshots/system-list.png" width="680" alt="Aeris System theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td></tr>
+</table>
 
-![In-place copy feedback](screenshots/copied.png)
+### Reproduce the captures
 
-![Dragging to a new position](screenshots/reorder.png)
+Build the `test_ui` target, install `xvfb`, `xauth`, and `openbox` (including the
+Breeze-ob theme), then run:
+
+```sh
+scripts/screenshots-linux.sh build-linux docs/screenshots
+```
+
+The script starts an isolated X11 desktop at 2× scale. The capture harness uses
+an in-memory keyring, a temporary encrypted snapshot, and isolated preferences;
+it does not read the user's accounts or modify the running application. Window
+frames are captured directly from the desktop rather than added afterward.

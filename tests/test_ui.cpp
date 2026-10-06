@@ -8,6 +8,7 @@
 #include <QClipboard>
 #include <QCryptographicHash>
 #include <QDialog>
+#include <QDir>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFileDialog>
@@ -20,6 +21,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QPushButton>
+#include <QScreen>
 #include <QScrollBar>
 #include <QSettings>
 #include <QStandardItemModel>
@@ -43,6 +45,7 @@ class UiTest final : public QObject {
     void reportedBrands();
     void brandFallback();
     void brandCache();
+    void gallery();
     void presentation_data();
     void presentation();
     void copyAnimation();
@@ -386,14 +389,11 @@ class UiKeys final : public CredentialStore {
 };
 static Entries previewEntries() {
     Entries entries;
-    const QList<QPair<QString, QString>> accounts{{"Google", "alex@example.test"},
-                                                  {"GitHub", "alex9001"},
-                                                  {"Microsoft", "alex@work.example"},
-                                                  {"Proton", "personal@example.test"},
-                                                  {"Steam", "nightshift"},
-                                                  {"Google", "work@example.test"},
-                                                  {"Cloudflare", "alex@example.test"},
-                                                  {"日本 · Example", QString(120, 'x')}};
+    const QList<QPair<QString, QString>> accounts{
+        {"Google", "user@example.com"},     {"GitHub", "user@example.com"},
+        {"Microsoft", "user@example.com"},  {"Proton", "user@example.com"},
+        {"Steam", "user@example.com"},      {"Google", "user@example.com"},
+        {"Cloudflare", "user@example.com"}, {"My server", "user@example.com"}};
     for (const auto &account : accounts) {
         const auto type = account.first == "Steam" ? TokenType::Steam : TokenType::Totp;
         const auto key = "synthetic preview key " + account.first.toUtf8() + account.second.toUtf8();
@@ -406,6 +406,63 @@ static void chooseAction(Window &window, const QString &name) {
     auto *action = window.findChild<QAction *>(name);
     QVERIFY2(action, qPrintable(name));
     action->trigger();
+}
+static Entries galleryEntries() {
+    Entries entries;
+    for (const QString &issuer : {"Google", "GitHub", "Microsoft", "Proton", "Steam", "Cloudflare",
+                                  "WordPress", "MongoDB", "Bitwarden"}) {
+        const bool steam = issuer == "Steam";
+        entries.append(
+            std::make_shared<Entry>(issuer, "user@example.com", "synthetic gallery key " + issuer.toUtf8(),
+                                    "SHA1", steam ? 5 : 6, 30, steam ? TokenType::Steam : TokenType::Totp));
+    }
+    return entries;
+}
+static void captureGalleryWindow(Window &window, const QString &path) {
+    window.activateWindow();
+    QVERIFY(QTest::qWaitForWindowActive(&window));
+    QTest::qWait(200);
+    const auto frame = window.frameGeometry();
+    QVERIFY2(frame.height() > window.height(), "A window manager with native decorations is required.");
+    const auto image = window.screen()->grabWindow(0, frame.x(), frame.y(), frame.width(), frame.height());
+    QVERIFY2(image.width() >= 2000, "Capture at 2x display scale, without image upscaling.");
+    QVERIFY(image.save(path));
+}
+static void captureScene(const std::shared_ptr<VaultStore> &store, const QString &theme,
+                         const QString &layout, const QString &output) {
+    Window window([store] { return store; });
+    chooseAction(window, "theme." + theme);
+    chooseAction(window, "layout." + layout);
+    window.resize(1000, layout == "List" ? 820 : 660);
+    window.move(100, 70);
+    window.show();
+    QSignalSpy ready(&window, &Window::collectionReady);
+    window.load();
+    QTRY_COMPARE(ready.count(), 1);
+    // Apply after the native window is exposed so palette-derived toolbar icons refresh too.
+    chooseAction(window, "theme." + theme);
+    window.findChild<AccountView *>()->clearSelection();
+    window.findChild<QLineEdit *>("searchAccounts")->setFocus();
+    captureGalleryWindow(window, output + "/" + theme.toLower() + "-" + layout.toLower() + ".png");
+}
+void UiTest::gallery() {
+    const auto output = qEnvironmentVariable("AERIS_SCREENSHOT_DIR");
+    if (output.isEmpty())
+        QSKIP("Set AERIS_SCREENSHOT_DIR under a decorated X11 desktop to capture the gallery.");
+    QVERIFY(QDir().mkpath(output));
+    QTemporaryDir directory;
+    auto store = std::make_shared<VaultStore>(std::make_shared<UiKeys>(),
+                                              std::make_shared<DiskFiles>(directory.path()));
+    store->replace(galleryEntries());
+    const QList<QPair<QString, QString>> scenes{
+        {"Light", "Compact"}, {"Light", "Cards"},    {"Dark", "Cards"},   {"Midnight", "List"},
+        {"Ocean", "Cards"},   {"Forest", "Compact"}, {"Violet", "Cards"}, {"Rose", "List"},
+        {"Paper", "Compact"}, {"System", "List"}};
+    const auto selected = qEnvironmentVariable("AERIS_SCREENSHOT_SCENE");
+    for (const auto &[theme, layout] : scenes) {
+        if (selected.isEmpty() || selected == theme + "-" + layout)
+            captureScene(store, theme, layout, output);
+    }
 }
 void UiTest::presentation_data() {
     QTest::addColumn<QString>("theme");
