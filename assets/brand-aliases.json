@@ -1,0 +1,28 @@
+{
+  "amazon-web-services": [
+    "AWS"
+  ],
+  "github": [
+    "github.com"
+  ],
+  "proton-mail": [
+    "ProtonMail"
+  ],
+  "wordpress": [
+    "wordpress.org",
+    "wordpress.com"
+  ],
+  "mongodb": [
+    "monogodb",
+    "mongodb.com",
+    "MongoDB Atlas"
+  ],
+  "fidelity": [
+    "fidelity.com",
+    "Fidelity Investments"
+  ],
+  "chase": [
+    "chase.com",
+    "Chase Bank"
+  ]
+}

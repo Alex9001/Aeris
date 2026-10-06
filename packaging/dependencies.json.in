@@ -1,0 +1,53 @@
+{
+  "Aeris": {
+    "version": "@PROJECT_VERSION@",
+    "license": "MIT",
+    "source": "https://github.com/Alex9001/Aeris"
+  },
+  "Qt6": {
+    "version": "@Qt6Core_VERSION@",
+    "license": "LGPL-3.0-only",
+    "source": "https://download.qt.io/archive/qt/"
+  },
+  "QtKeychain": {
+    "version": "@Qt6Keychain_VERSION@",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/frankosterfeld/qtkeychain"
+  },
+  "openssl": {
+    "version": "@OPENSSL_VERSION@",
+    "license": "Apache-2.0",
+    "source": "https://github.com/openssl/openssl"
+  },
+  "libsodium": {
+    "version": "@SODIUM_VERSION@",
+    "license": "ISC",
+    "source": "https://github.com/jedisct1/libsodium"
+  },
+  "libzip": {
+    "version": "@ZIP_VERSION@",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/nih-at/libzip"
+  },
+  "zxing-cpp": {
+    "version": "@ZXing_VERSION@",
+    "license": "Apache-2.0",
+    "source": "https://github.com/zxing-cpp/zxing-cpp"
+  },
+  "protobuf": {
+    "version": "@Protobuf_VERSION@",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/protocolbuffers/protobuf"
+  },
+  "selfhst-icons": {
+    "version": "2053b70b283ffed5f2cc1424d1e17d9c554a846d",
+    "license": "CC-BY-4.0",
+    "source": "https://github.com/selfhst/icons/tree/2053b70b283ffed5f2cc1424d1e17d9c554a846d"
+  },
+  "aeris-supplemental-brand-artwork": {
+    "version": "2026-10-06",
+    "license": "NOASSERTION",
+    "source": "NOASSERTION",
+    "comment": "15 service-identification logos; individual sources, revisions, ownership notices and SHA-256 values in assets/brand-sources/catalog.json and licenses/brand-supplement-NOTICE.md."
+  }
+}

@@ -1,0 +1,236 @@
+name: Desktop release
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+env:
+  QT_VERSION: '6.10.2'
+  SYFT_VERSION: v1.51.0
+  VCPKG_COMMIT: 434307da09bc05b2c86996dccc8b2351fc0d5d37
+jobs:
+  quality:
+    uses: ./.github/workflows/ci.yml
+  linux:
+    needs: quality
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+            tool_arch: x86_64
+            deploy_sha: 8aea8da0f7f7039d2a2cecb14657d752a222a5e1d3825caeef186c82f751cdd1
+            plugin_sha: cfc1055b2b9dbc08412b579f20990b7b41a17b61beaa5847dc9477c96c9e9617
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+            tool_arch: aarch64
+            deploy_sha: 5c1fddf96066891e829831cac0d84424690f3b22846c7f8f1bb9990a5c6c73f4
+            plugin_sha: d5b5a9020065cefda8c7af7c9500f686b23640eac50c88201a81752c6ee2e49c
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Install native dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build pkg-config g++ qt6-base-dev qtkeychain-qt6-dev qt6-wayland libssl-dev libsodium-dev libzip-dev libzxing-dev libprotobuf-dev protobuf-compiler libgl1-mesa-dev libfuse2t64 xvfb xauth weston ripgrep file
+      - uses: anchore/sbom-action/download-syft@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26
+        with:
+          syft-version: ${{ env.SYFT_VERSION }}
+      - name: Fetch verified deployment tools
+        env:
+          TOOL_ARCH: ${{ matrix.tool_arch }}
+          DEPLOY_SHA: ${{ matrix.deploy_sha }}
+          PLUGIN_SHA: ${{ matrix.plugin_sha }}
+        run: |
+          curl -fL --retry 3 "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-$TOOL_ARCH.AppImage" -o linuxdeploy
+          curl -fL --retry 3 "https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-$TOOL_ARCH.AppImage" -o linuxdeploy-plugin-qt
+          printf '%s  %s\n' "$DEPLOY_SHA" linuxdeploy "$PLUGIN_SHA" linuxdeploy-plugin-qt | sha256sum -c -
+          chmod +x linuxdeploy linuxdeploy-plugin-qt
+      - name: Build, package and smoke test
+        run: |
+          cmake -S . -B build-release -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-release --parallel 3
+          ctest --test-dir build-release --output-on-failure
+          LINUXDEPLOY="$PWD/linuxdeploy" scripts/package-linux.sh
+          scripts/smoke-linux.sh release-assets/*.AppImage
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: linux-${{ matrix.arch }}
+          path: release-assets/*
+          if-no-files-found: error
+  windows:
+    needs: quality
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: windows-latest
+            arch: amd64
+            triplet: x64-windows
+            qt_arch: win64_msvc2022_64
+            msvc: x64
+          - runner: windows-11-arm
+            arch: arm64
+            triplet: arm64-windows
+            qt_arch: win64_msvc2022_arm64
+            msvc: amd64_arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756
+        with:
+          arch: ${{ matrix.msvc }}
+      - uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: ${{ matrix.qt_arch }}
+          cache: true
+      - uses: anchore/sbom-action/download-syft@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26
+        with:
+          syft-version: ${{ env.SYFT_VERSION }}
+      - name: Dependencies, build, tests and packages
+        shell: pwsh
+        env:
+          ARCH: ${{ matrix.arch }}
+          TRIPLET: ${{ matrix.triplet }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          choco install nsis -y --no-progress
+          git clone https://github.com/microsoft/vcpkg.git build-deps/vcpkg
+          git -C build-deps/vcpkg checkout --detach $env:VCPKG_COMMIT
+          & build-deps/vcpkg/bootstrap-vcpkg.bat -disableMetrics
+          python scripts/build-keychain.py --prefix build-deps/install
+          if ($LASTEXITCODE) { throw 'QtKeychain build failed' }
+          cmake -S . -B build-release -G Ninja -DCMAKE_BUILD_TYPE=Release "-DCMAKE_TOOLCHAIN_FILE=$PWD/build-deps/vcpkg/scripts/buildsystems/vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=$env:TRIPLET" "-DVCPKG_INSTALLED_DIR=$PWD/vcpkg_installed" "-DCMAKE_PREFIX_PATH=$PWD/build-deps/install;$env:QT_ROOT_DIR"
+          if ($LASTEXITCODE) { throw 'Configure failed' }
+          cmake --build build-release --parallel 3
+          if ($LASTEXITCODE) { throw 'Build failed' }
+          $env:PATH = "$PWD/vcpkg_installed/$env:TRIPLET/bin;$PWD/build-deps/install/bin;$env:PATH"
+          ctest --test-dir build-release --output-on-failure
+          if ($LASTEXITCODE) { throw 'Tests failed' }
+          ./scripts/package-windows.ps1 -Arch $env:ARCH -Triplet $env:TRIPLET
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: windows-${{ matrix.arch }}
+          path: release-assets/*
+          if-no-files-found: error
+  macos-native:
+    needs: quality
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15-intel
+            arch: x86_64
+            triplet: x64-osx-dynamic
+          - runner: macos-15
+            arch: arm64
+            triplet: arm64-osx-dynamic
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: clang_64
+          cache: true
+      - name: Dependencies, native build and tests
+        env:
+          ARCH: ${{ matrix.arch }}
+          TRIPLET: ${{ matrix.triplet }}
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git build-deps/vcpkg
+          git -C build-deps/vcpkg checkout --detach "$VCPKG_COMMIT"
+          build-deps/vcpkg/bootstrap-vcpkg.sh -disableMetrics
+          python3 scripts/build-keychain.py --prefix build-deps/install --arch "$ARCH"
+          cmake -S . -B build-release -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 -DCMAKE_OSX_ARCHITECTURES="$ARCH" -DCMAKE_TOOLCHAIN_FILE="$PWD/build-deps/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_TRIPLETS="$PWD/packaging/triplets" -DVCPKG_TARGET_TRIPLET="$TRIPLET" -DVCPKG_INSTALLED_DIR="$PWD/vcpkg_installed" -DCMAKE_PREFIX_PATH="$PWD/build-deps/install;$QT_ROOT_DIR"
+          cmake --build build-release --parallel 3
+          ctest --test-dir build-release --output-on-failure
+          scripts/package-macos.sh "$TRIPLET"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: macos-${{ matrix.arch }}
+          path: release-assets/*.tar.gz
+          if-no-files-found: error
+  macos-universal:
+    needs: macos-native
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          pattern: macos-*
+          path: native
+          merge-multiple: true
+      - uses: anchore/sbom-action/download-syft@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26
+        with:
+          syft-version: ${{ env.SYFT_VERSION }}
+      - name: Merge, verify both slices, and make DMG
+        run: |
+          mkdir -p build-universal/x64 build-universal/arm64 release-assets
+          tar -xzf native/aeris_x64-osx-dynamic.app.tar.gz -C build-universal/x64
+          tar -xzf native/aeris_arm64-osx-dynamic.app.tar.gz -C build-universal/arm64
+          python3 scripts/merge-macos.py build-universal/x64/aeris.app build-universal/arm64/aeris.app build-universal/Aeris.app
+          python3 scripts/audit-macos.py build-universal/Aeris.app
+          softwareupdate --install-rosetta --agree-to-license
+          QT_QPA_PLATFORM=offscreen arch -arm64 build-universal/Aeris.app/Contents/MacOS/aeris --smoke-test
+          QT_QPA_PLATFORM=offscreen arch -x86_64 build-universal/Aeris.app/Contents/MacOS/aeris --smoke-test
+          syft dir:build-universal/Aeris.app -o spdx-json=release-assets/aeris_macos_universal.sbom.json
+          mkdir -p build-release
+          cp build-universal/Aeris.app/Contents/Resources/dependencies.json build-release/
+          python3 scripts/complete-sbom.py release-assets/aeris_macos_universal.sbom.json
+          python3 scripts/check-sbom.py release-assets/aeris_macos_universal.sbom.json
+          mkdir -p build-universal/dmg
+          cp -R build-universal/Aeris.app build-universal/dmg/
+          ln -s /Applications build-universal/dmg/Applications
+          hdiutil create -volname Aeris -srcfolder build-universal/dmg -ov -format UDZO release-assets/aeris_macos_universal.dmg
+          hdiutil attach release-assets/aeris_macos_universal.dmg -mountpoint "$RUNNER_TEMP/aeris-dmg"
+          QT_QPA_PLATFORM=offscreen "$RUNNER_TEMP/aeris-dmg/Aeris.app/Contents/MacOS/aeris" --smoke-test
+          hdiutil detach "$RUNNER_TEMP/aeris-dmg"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: macos-universal
+          path: release-assets/*
+          if-no-files-found: error
+  assemble:
+    needs: [linux, windows, macos-universal]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          pattern: linux-*
+          path: release-assets
+          merge-multiple: true
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          pattern: windows-*
+          path: release-assets
+          merge-multiple: true
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: macos-universal
+          path: release-assets
+      - name: Verify inventory, source recipe, checksums and provenance
+        run: python3 scripts/assemble.py
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: release-preflight
+          path: release-assets/*
+          if-no-files-found: error
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          subject-path: release-assets/*
+      - name: Publish verified tag artifacts
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$RELEASE_TAG" release-assets/* --verify-tag --title "Aeris $RELEASE_TAG" --notes-file .github/RELEASE_NOTES.md

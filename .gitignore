@@ -1,0 +1,10 @@
+/build*/
+/out/
+/release-assets/
+/.venv/
+*.user
+__pycache__/
+*.profraw
+/vcpkg_installed/
+/linuxdeploy
+/linuxdeploy-plugin-qt

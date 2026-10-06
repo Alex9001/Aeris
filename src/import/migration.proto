@@ -1,0 +1,20 @@
+syntax = "proto3";
+package aeris.migration;
+option optimize_for = LITE_RUNTIME;
+// Wire field numbers independently transcribed for Google migration interoperability.
+message Account {
+  bytes secret = 1;
+  string name = 2;
+  string issuer = 3;
+  int32 algorithm = 4;
+  int32 digits = 5;
+  int32 type = 6;
+  int64 counter = 7;
+}
+message Batch {
+  repeated Account accounts = 1;
+  int32 version = 2;
+  int32 size = 3;
+  int32 index = 4;
+  int32 id = 5;
+}

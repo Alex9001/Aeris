@@ -1,0 +1,7 @@
+lizard==1.17.31
+cryptography==46.0.3
+PyNaCl==1.6.1
+argon2-cffi==25.1.0
+pyzipper==0.3.6
+qrcode[pil]==8.2
+Pillow==12.3.0

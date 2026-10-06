@@ -1,0 +1,35 @@
+name: Quality
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Native dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build pkg-config g++ clang-18 clang-tidy-18 libclang-rt-18-dev qt6-base-dev qtkeychain-qt6-dev libssl-dev libsodium-dev libzip-dev libzxing-dev libprotobuf-dev protobuf-compiler python3-venv
+      - name: Build and test
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-18
+          cmake --build build --parallel 3
+          ctest --test-dir build --output-on-failure
+      - name: Complexity gates
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install lizard==1.17.31
+          .venv/bin/python scripts/lint.py --build build --tidy clang-tidy-18 --jobs 2
+      - name: Sanitizers and parser fuzzing
+        run: |
+          cmake -S . -B build-asan -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-18 -DAERIS_SANITIZERS=ON -DAERIS_FUZZ=ON
+          cmake --build build-asan --parallel 3
+          ctest --test-dir build-asan --output-on-failure
+          mkdir -p build-asan/corpus
+          cp tests/fixtures/* build-asan/corpus/
+          build-asan/fuzz_import -max_total_time=60 -rss_limit_mb=2048 -max_len=65536 build-asan/corpus

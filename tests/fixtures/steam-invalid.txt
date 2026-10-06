@@ -1,0 +1,1 @@
+otpauth://steam/Steam:alice@example.test?secret=GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ&digits=8

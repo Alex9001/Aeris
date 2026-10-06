@@ -1,0 +1,1 @@
+{"schemaVersion":4,"services":[{"name":"Étoile 日本","secret":"GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ","otp":{"account":"alice@example.test","algorithm":"SHA1","digits":6,"period":30,"tokenType":"TOTP"}}]}

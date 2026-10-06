@@ -1,0 +1,193 @@
+[
+  {
+    "id": "godaddy",
+    "name": "GoDaddy",
+    "aliases": [
+      "godaddy.com"
+    ],
+    "file": "godaddy.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/g/godaddy.com.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "7a6e55f5a5b263f2c7157ff6488e240dad132c83c1b6767c9b53b5ac2b0f8e7d"
+  },
+  {
+    "id": "patelco",
+    "name": "Patelco Credit Union",
+    "aliases": [
+      "Patelco",
+      "patelco.org"
+    ],
+    "file": "patelco.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/p/patelco.org.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "789262aaf2bbc09b8ac88e1c9779d488a33733e041bbb6e03d787f374908cd33"
+  },
+  {
+    "id": "gog",
+    "name": "GOG",
+    "aliases": [
+      "gog.com",
+      "Good Old Games"
+    ],
+    "file": "gog.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/g/gog.com.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "88a771ca76370040929bdab9fb46e2da9ac0cfc0dff72a74d9fef64ed3ecfefb"
+  },
+  {
+    "id": "dreamhost",
+    "name": "DreamHost",
+    "aliases": [
+      "dreamhost.com"
+    ],
+    "file": "dreamhost.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/d/dreamhost.com.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "0afc21226a3efe2a4cfcdbcd814183fc64bc187d9d253c160abecee3c73a389a"
+  },
+  {
+    "id": "rocket-mortgage",
+    "name": "Rocket Mortgage",
+    "aliases": [
+      "rocketmortgage.com"
+    ],
+    "file": "rocket-mortgage.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/r/rocketmortgage.com.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "c4faf636f55283eb4ac4ffe86dab874bd76d2188d744f33e3f9e3258facbf423"
+  },
+  {
+    "id": "spaceship",
+    "name": "Spaceship",
+    "aliases": [
+      "spaceship.com"
+    ],
+    "file": "spaceship.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/s/spaceship.com.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "aa847cc2522894949e8f750b982304abbaae506ad8776d1ef1937a4ecfae885d"
+  },
+  {
+    "id": "zoho",
+    "name": "Zoho",
+    "aliases": [
+      "zoho.com",
+      "Zoho Accounts"
+    ],
+    "file": "zoho.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/z/zoho.com.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "324616cee4c43305e17fa5fca2d01961b553062c1594124b4229b7a44840f2de"
+  },
+  {
+    "id": "intuit",
+    "name": "Intuit",
+    "aliases": [
+      "intuit.com"
+    ],
+    "file": "intuit.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/i/intuit.com.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "88ceefba47051ea8ce655c5e7baf030a5244513ddaaa32b8f2ef1c2906988566"
+  },
+  {
+    "id": "rockstar",
+    "name": "Rockstar Games",
+    "aliases": [
+      "Rockstar",
+      "rockstargames.com",
+      "Rockstar Games Social Club"
+    ],
+    "file": "rockstar.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/r/rockstargames.com.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "1fce287a32cb477faf3f2b3ce7fa72e5e1cc38777d9a24276a32ad1a96d2ec44"
+  },
+  {
+    "id": "ubisoft",
+    "name": "Ubisoft",
+    "aliases": [
+      "ubisoft.com",
+      "Ubisoft Connect",
+      "Uplay"
+    ],
+    "file": "ubisoft.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/u/ubisoft.com.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "a39a201e2f9bace235af27cfdfd276e0618c022464630294123bcb468def8294"
+  },
+  {
+    "id": "id-me",
+    "name": "ID.me",
+    "aliases": [
+      "IDme"
+    ],
+    "file": "id-me.svg",
+    "source": "https://github.com/2factorauth/twofactorauth/blob/92d901f308ed6adc07b2415377b011c7dd544b13/img/i/id.me.svg",
+    "revision": "92d901f308ed6adc07b2415377b011c7dd544b13",
+    "license": "NOASSERTION",
+    "sourceSha256": "2655384fff26e35be76e553326536f9bcccdab81d4060b381221f9f08c0b2c8a"
+  },
+  {
+    "id": "rocket-money",
+    "name": "Rocket Money",
+    "aliases": [
+      "rocketmoney.com"
+    ],
+    "file": "rocket-money.png",
+    "source": "https://framerusercontent.com/images/mualMUJa0moL3JYXng8nkSY5paA.png",
+    "retrieved": "2026-10-06",
+    "license": "NOASSERTION",
+    "sourceSha256": "7e9dee3109689574045d3a68d958d2096f57f9a63a85d3cc8bcbd9c25ef541e6"
+  },
+  {
+    "id": "tastytrade",
+    "name": "tastytrade",
+    "aliases": [
+      "tastyworks",
+      "tastyworks.com",
+      "tastytrade.com"
+    ],
+    "file": "tastytrade.svg",
+    "source": "https://tastytrade.com/favicon.svg?v=8ca44522c3eaa2f81bd4984c419e750d",
+    "retrieved": "2026-10-06",
+    "license": "NOASSERTION",
+    "sourceSha256": "1e7441996467c0e656526711cdf2e9564a0af5b0b7f995862708da9082f4fa42"
+  },
+  {
+    "id": "sonicwall",
+    "name": "SonicWall",
+    "aliases": [
+      "MySonicWall",
+      "mysonicwall.com",
+      "sonicwall.com"
+    ],
+    "file": "sonicwall.ico",
+    "source": "https://www.mysonicwall.com/favicon.ico",
+    "retrieved": "2026-10-06",
+    "license": "NOASSERTION",
+    "sourceSha256": "79c620c6815d34f5b503d03d62999be2d7550e8994dcd28cfcd35bb23046c8b1"
+  },
+  {
+    "id": "dwservice",
+    "name": "DWService",
+    "aliases": [
+      "dwservice.net"
+    ],
+    "file": "dwservice.png",
+    "source": "https://www.dwservice.net/res/images/Favicon.png",
+    "retrieved": "2026-10-06",
+    "license": "NOASSERTION",
+    "sourceSha256": "869fff16d9391e14d025e485e26d06b9e99d65a9d7fb874f22491e8d45898503"
+  }
+]

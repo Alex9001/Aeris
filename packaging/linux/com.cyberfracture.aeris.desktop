@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Aeris
+Comment=Codes from your phone authenticator exports
+Exec=aeris
+Icon=com.cyberfracture.aeris
+Terminal=false
+Categories=Utility;Security;
+StartupNotify=true
+StartupWMClass=aeris

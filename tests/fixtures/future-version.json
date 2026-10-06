@@ -1,0 +1,1 @@
+{"version":999,"header":{"slots":null,"params":null},"db":{"version":3,"entries":[{"type":"totp","name":"alice@example.test","issuer":"Étoile 日本","info":{"secret":"GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ","algo":"SHA1","digits":6,"period":30}}]}}

@@ -1,0 +1,1 @@
+otpauth://totp/A%20B:alice@example.test?secret=GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ&issuer=A+B

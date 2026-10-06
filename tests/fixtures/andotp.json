@@ -1,0 +1,1 @@
+[{"type":"TOTP","issuer":"Étoile 日本","label":"alice@example.test","secret":"GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ","algorithm":"SHA1","digits":6,"period":30}]

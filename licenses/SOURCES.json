@@ -1,0 +1,13 @@
+{
+  "Qt-LGPL-3.0.txt": "https://raw.githubusercontent.com/qt/qtbase/v6.10.2/LICENSES/LGPL-3.0-only.txt",
+  "Qt-GPL-3.0.txt": "https://raw.githubusercontent.com/qt/qtbase/v6.10.2/LICENSES/GPL-3.0-only.txt",
+  "QtKeychain-BSD.txt": "https://raw.githubusercontent.com/frankosterfeld/qtkeychain/875f77d9f61bd97fd84cca47ce3bc71186dfbd09/COPYING",
+  "OpenSSL-Apache.txt": "https://raw.githubusercontent.com/openssl/openssl/openssl-3.6.0/LICENSE.txt",
+  "libsodium-ISC.txt": "https://raw.githubusercontent.com/jedisct1/libsodium/1.0.20-RELEASE/LICENSE",
+  "libzip-BSD.txt": "https://raw.githubusercontent.com/nih-at/libzip/v1.11.4/LICENSE",
+  "ZXing-Apache.txt": "https://raw.githubusercontent.com/zxing-cpp/zxing-cpp/v2.3.0/LICENSE",
+  "protobuf-BSD.txt": "https://raw.githubusercontent.com/protocolbuffers/protobuf/v33.0/LICENSE",
+  "selfhst-icons-CC-BY-4.0.txt": "https://raw.githubusercontent.com/selfhst/icons/2053b70b283ffed5f2cc1424d1e17d9c554a846d/LICENSE",
+  "2fa-directory-LICENSE.md": "https://raw.githubusercontent.com/2factorauth/twofactorauth/92d901f308ed6adc07b2415377b011c7dd544b13/LICENSE.md",
+  "2fa-directory-IMAGE-POLICY.md": "https://raw.githubusercontent.com/2factorauth/twofactorauth/92d901f308ed6adc07b2415377b011c7dd544b13/README.md"
+}

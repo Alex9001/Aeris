@@ -1,0 +1,5 @@
+<RCC><qresource prefix="/">
+<file alias="aeris.png">icons/aeris-256.png</file>
+<file alias="LICENSE">../LICENSE</file>
+<file alias="THIRD_PARTY_NOTICES.md">../THIRD_PARTY_NOTICES.md</file>
+</qresource></RCC>
