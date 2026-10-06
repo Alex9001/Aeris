@@ -455,9 +455,9 @@ void UiTest::gallery() {
                                               std::make_shared<DiskFiles>(directory.path()));
     store->replace(galleryEntries());
     const QList<QPair<QString, QString>> scenes{
-        {"Light", "Compact"}, {"Light", "Cards"},    {"Dark", "Cards"},   {"Midnight", "List"},
-        {"Ocean", "Cards"},   {"Forest", "Compact"}, {"Violet", "Cards"}, {"Rose", "List"},
-        {"Paper", "Compact"}, {"System", "List"}};
+        {"Light", "Compact"}, {"Dark", "Cards"},     {"Midnight", "List"},
+        {"Ocean", "Cards"},   {"Forest", "Compact"}, {"Violet", "Cards"},
+        {"Rose", "List"},     {"Paper", "Compact"},  {"System", "List"}};
     const auto selected = qEnvironmentVariable("AERIS_SCREENSHOT_SCENE");
     for (const auto &[theme, layout] : scenes) {
         if (selected.isEmpty() || selected == theme + "-" + layout)

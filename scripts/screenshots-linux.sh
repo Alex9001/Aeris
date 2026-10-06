@@ -19,7 +19,7 @@ cat > "$runtime/openbox.xml" <<'XML'
 XML
 export XDG_CONFIG_HOME="$runtime/config" XDG_DATA_HOME="$runtime/data" TMPDIR="$runtime"
 export QT_QPA_PLATFORM=xcb QT_SCALE_FACTOR=2 QT_FONT_DPI=96 AERIS_SCREENSHOT_DIR="$output"
-for scene in Light-Compact Light-Cards Dark-Cards Midnight-List Ocean-Cards Forest-Compact Violet-Cards Rose-List Paper-Compact System-List; do
+for scene in Light-Compact Dark-Cards Midnight-List Ocean-Cards Forest-Compact Violet-Cards Rose-List Paper-Compact System-List; do
 export AERIS_SCREENSHOT_SCENE="$scene"
 xvfb-run -a -s '-screen 0 3200x2200x24 -dpi 96' bash -c '
   openbox --config-file "$1" > "$4/openbox.log" 2>&1 &

@@ -225,3 +225,11 @@ was changed.
 
 All six local CTest suites pass after the capture-harness changes. Lizard and
 clang-tidy complexity checks, PNG validation and README link/render checks pass.
+
+## Gallery and Actions preference
+
+Removed Light/Cards from the published gallery and capture list. Light/Compact
+remains the primary screenshot; eight other themes form a two-column, four-row
+grid. GitHub Actions are disabled at repository level to conserve quota. Push,
+pull-request and tag triggers were removed; workflows are retained for explicit
+manual requests only.

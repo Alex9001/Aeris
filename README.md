@@ -58,28 +58,26 @@ Use the layout buttons or **Ctrl/Cmd+1–3** to switch views. The **Theme** menu
 Choose System, Light, Dark, Midnight, Ocean, Forest, Violet, Rose, or Paper. All three layouts share the same accounts, service logos, countdowns, and copy feedback.
 
 <table>
-  <tr><th width="50%">Light · Cards</th><th width="50%">Dark · Cards</th></tr>
+  <tr><th width="50%">Dark · Cards</th><th width="50%">Ocean · Cards</th></tr>
   <tr>
-    <td><a href="docs/screenshots/light-cards.png"><img src="docs/screenshots/light-cards.png" alt="Aeris Light theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
     <td><a href="docs/screenshots/dark-cards.png"><img src="docs/screenshots/dark-cards.png" alt="Aeris Dark theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
-  </tr>
-  <tr><th width="50%">Ocean · Cards</th><th width="50%">Violet · Cards</th></tr>
-  <tr>
     <td><a href="docs/screenshots/ocean-cards.png"><img src="docs/screenshots/ocean-cards.png" alt="Aeris Ocean theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
+  </tr>
+  <tr><th width="50%">Violet · Cards</th><th width="50%">Forest · Compact</th></tr>
+  <tr>
     <td><a href="docs/screenshots/violet-cards.png"><img src="docs/screenshots/violet-cards.png" alt="Aeris Violet theme in Cards layout with native titlebar and synthetic user@example.com accounts"></a></td>
-  </tr>
-  <tr><th width="50%">Forest · Compact</th><th width="50%">Paper · Compact</th></tr>
-  <tr>
     <td><a href="docs/screenshots/forest-compact.png"><img src="docs/screenshots/forest-compact.png" alt="Aeris Forest theme in Compact layout with native titlebar and synthetic user@example.com accounts"></a></td>
-    <td><a href="docs/screenshots/paper-compact.png"><img src="docs/screenshots/paper-compact.png" alt="Aeris Paper theme in Compact layout with native titlebar and synthetic user@example.com accounts"></a></td>
   </tr>
-  <tr><th width="50%">Midnight · List</th><th width="50%">Rose · List</th></tr>
+  <tr><th width="50%">Paper · Compact</th><th width="50%">Rose · List</th></tr>
   <tr>
-    <td><a href="docs/screenshots/midnight-list.png"><img src="docs/screenshots/midnight-list.png" alt="Aeris Midnight theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="docs/screenshots/paper-compact.png"><img src="docs/screenshots/paper-compact.png" alt="Aeris Paper theme in Compact layout with native titlebar and synthetic user@example.com accounts"></a></td>
     <td><a href="docs/screenshots/rose-list.png"><img src="docs/screenshots/rose-list.png" alt="Aeris Rose theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td>
   </tr>
-  <tr><th colspan="2">System · List</th></tr>
-  <tr><td colspan="2" align="center"><a href="docs/screenshots/system-list.png"><img src="docs/screenshots/system-list.png" width="680" alt="Aeris System theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td></tr>
+  <tr><th width="50%">Midnight · List</th><th width="50%">System · List</th></tr>
+  <tr>
+    <td><a href="docs/screenshots/midnight-list.png"><img src="docs/screenshots/midnight-list.png" alt="Aeris Midnight theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td>
+    <td><a href="docs/screenshots/system-list.png"><img src="docs/screenshots/system-list.png" alt="Aeris System theme in List layout with native titlebar and synthetic user@example.com accounts"></a></td>
+  </tr>
 </table>
 
 [Explore the interface →](docs/interface.md)
@@ -140,7 +138,7 @@ On Arch/Artix, the library packages are `qt6-base qt6-keychain qt6-wayland opens
 | [Releases and packaging](docs/releases.md) | Dependencies, AppImages, installers, archives, and release checks |
 | [Application artwork](docs/branding.md) | The A-Shield master and platform icon generation |
 
-Tests use synthetic secrets only. Regenerate fixtures with `python scripts/fixtures.py` after installing `scripts/requirements.txt` in a virtual environment. `scripts/lint.py` enforces Lizard 1.17.31 cyclomatic complexity ≤10 and clang-tidy cognitive complexity ≤15 for maintained C++ functions. CI additionally runs ASan/UBSan and libFuzzer.
+Tests use synthetic secrets only. Regenerate fixtures with `python scripts/fixtures.py` after installing `scripts/requirements.txt` in a virtual environment. `scripts/lint.py` enforces Lizard 1.17.31 cyclomatic complexity ≤10 and clang-tidy cognitive complexity ≤15 for maintained C++ functions. The optional CI workflow includes ASan/UBSan and libFuzzer. GitHub Actions are disabled to conserve quota; workflows must only be enabled and run on explicit request.
 
 ## License
 
