@@ -1,6 +1,8 @@
 # Desktop releases
 
-`.github/workflows/release.yml` follows the whodis desktop distribution model. Manual workflow dispatch builds a **nonpublishing preflight**; only a `v*` tag matching `CMakeLists.txt` publishes. The workflow runs quality gates first, builds on native amd64/arm64 runners, tests each binary, bundles its runtime, tests the packages, and assembles checksums, SPDX SBOMs and provenance. No repository, tag, AUR submission or release is created merely by building this workspace.
+GitHub Actions are disabled to conserve quota and must only be enabled or run on explicit request. The retained workflows have no automatic push, pull-request, or tag triggers. Manual workflow dispatch builds a nonpublishing preflight; a manually requested run against a `v*` tag matching `CMakeLists.txt` can publish after its quality and packaging gates pass.
+
+The first public release is built locally. Its verified binary target is **Linux x86-64**, with the corresponding source archive, SPDX SBOM, checksums, source recipe and local build provenance.
 
 | Platform | Outputs | Verification |
 | --- | --- | --- |
@@ -26,10 +28,10 @@ Windows: use the matching MSVC/Qt SDK, the pinned vcpkg toolchain and `scripts/b
 
 macOS: run `scripts/package-macos.sh <triplet>` after each native build. `scripts/merge-macos.py` creates the universal bundle; `scripts/audit-macos.py` rejects unresolved build-machine dylib paths. See the workflow for exact commands.
 
-`licenses/` includes direct dependency license texts. Packaging also collects the actual dependency-manager notices, including transitive libraries. Syft's filesystem inventory is supplemented with CMake/vcpkg dependency metadata because compiled Qt libraries are not consistently identified by generic file scanners. The SBOM labels this source of evidence. Published artifacts also receive GitHub build-provenance attestations.
+`licenses/` includes direct dependency license texts. Packaging also collects the actual dependency-manager notices, including transitive libraries. Syft's filesystem inventory is supplemented with CMake/vcpkg dependency metadata because compiled Qt libraries are not consistently identified by generic file scanners. The SBOM labels this source of evidence. Artifacts published by the explicitly requested GitHub release workflow can receive GitHub build-provenance attestations. Locally published artifacts instead include a local build record; it is not a signed GitHub attestation.
 
 Use **Delete all…** before uninstalling if you want to remove imported data and keychain credentials. Uninstallers remove program files and retain user data; they do not silently erase authenticator state.
 
 ## Release status
 
-The release automation is provided for the planned `Alex9001/Aeris` repository. Cross-platform CI and publication must be run there before calling a release verified. The local results and remaining native-runner checks are recorded in `docs/verification.md`.
+The public `Alex9001/Aeris` repository publishes v0.1.0 with a locally verified Linux x86-64 AppImage. Windows, macOS and Linux ARM outputs remain pending native builds and package acceptance. The local results and remaining checks are recorded in `docs/verification.md`.

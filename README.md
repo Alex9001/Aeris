@@ -50,6 +50,14 @@ Bring an authenticator export to your desktop and keep the code you need within 
 
 [Video provenance and music license](docs/media/aeris-demo-14s.md).
 
+## Download
+
+**[Aeris v0.1.0](https://github.com/Alex9001/Aeris/releases/tag/v0.1.0)** provides a locally built **Linux x86-64 AppImage**, with runtime libraries bundled. The release includes [checksums](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/SHA256SUMS), an SPDX SBOM, the matching source archive, and local build provenance.
+
+[Download the Linux AppImage →](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/aeris_linux_amd64.AppImage)
+
+Make it executable with `chmod +x aeris_linux_amd64.AppImage`, then open it. If FUSE is unavailable, run `APPIMAGE_EXTRACT_AND_RUN=1 ./aeris_linux_amd64.AppImage`. The baseline is Ubuntu 24.04 or compatible newer Linux systems; a working system keyring is required. Windows, macOS, and ARM packages await native builds and verification.
+
 ## Quick start
 
 1. **Open Aeris.** Unlock your system keyring if prompted.
@@ -150,7 +158,7 @@ Tests use synthetic secrets only. Regenerate fixtures with `python scripts/fixtu
 
 **MIT** · © 2026 Aleksandr Oreshkin · CYBER FRACTURE
 
-See [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md). Bundled service logos retain their respective licenses and owners' rights.
+See [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md). Bundled service logos and the [demo soundtrack](docs/media/aeris-demo-14s.md) retain their respective licenses and owners' rights.
 
 <p align="center">
   <a href="https://cyberfracture.com">CYBER FRACTURE</a> ·

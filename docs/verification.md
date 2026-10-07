@@ -233,3 +233,33 @@ remains the primary screenshot; eight other themes form a two-column, four-row
 grid. GitHub Actions are disabled at repository level to conserve quota. Push,
 pull-request and tag triggers were removed; workflows are retained for explicit
 manual requests only.
+
+## Public v0.1.0 local Linux release
+
+The initial public release is built locally for Linux x86-64 using Ubuntu
+24.04.5 LTS, Clang 18, Qt 6.4.2 and QtKeychain 0.14.2. GitHub Actions remain
+disabled; no hosted build or attestation is used. The source tag, source archive,
+manifest and local provenance identify the published revision.
+
+The fresh Ubuntu Release build passes all six CTest suites (12.68 seconds).
+All six ASan/UBSan suites pass (17.02 seconds). A 60-second local parser fuzz
+check completes 121,931 runs without a sanitizer finding. Lizard and clang-tidy complexity
+gates pass, and actionlint validates the manual-only workflow files. The locally
+packaged AppImage passes X11/Xvfb and Wayland/headless Weston startup checks.
+System keyring write/read/delete and repeated synthetic encrypted-vault
+load/reorder/delete pass with both native and bundled Qt libraries. These
+checks use temporary synthetic accounts and leave the user's collection alone.
+
+A local benchmark measures 0.399 ms to filter 1,000 accounts (50 ms limit),
+57 ms to load and show them, 0.2% idle CPU and 45,520 KiB RSS. Warm empty
+startup samples are 33, 177, 57, 34 and 41 ms. Production keyring latency is
+excluded from the 1,000-account benchmark. Raw results accompany the release.
+
+The release has matching source, an SPDX SBOM, embedded dependency notices,
+SHA-256 checksums and a local build record. Video soundtrack attribution is now
+included in the top-level notices, and the icon's original provenance and
+checksum are restored. A repeated redacted history scan reports only the same
+20 previously reproduced synthetic-fixture matches, with no new findings.
+
+Windows, macOS and ARM binaries remain pending native builds and package
+acceptance. The published Linux build is unsigned and has no GitHub attestation.

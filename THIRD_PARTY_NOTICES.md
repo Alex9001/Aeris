@@ -51,3 +51,12 @@ Exact source URLs, original files and SHA-256 checksums are recorded in
 `assets/brand-sources`; output checksums are in `assets/brands/catalog.json`.
 The artwork is rasterized/resized to at most 128×128 pixels, preserving its
 colors and proportions, and bundled for offline use.
+
+## Demo video soundtrack
+
+`docs/media/aeris-demo-14s.mp4` includes an excerpt of **Classical 7** by
+**Jonny S.**, Mixkit recording 714. The soundtrack retains its third-party
+copyright and is not covered by Aeris's MIT license. The finished synchronized
+video and its documentation accompany the source archive; the music is not
+bundled in the application. See [video provenance and music license](docs/media/aeris-demo-14s.md)
+for source links, the Mixkit Stock Music Free License, and reuse restrictions.
