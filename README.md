@@ -137,7 +137,7 @@ ctest --test-dir build --output-on-failure
 ./build/aeris
 ```
 
-On Arch/Artix, the library packages are `qt6-base qt6-keychain qt6-wayland openssl libsodium libzip zxing-cpp protobuf`. A working Secret Service or KWallet is required to save or reopen imported accounts; there is no plaintext key fallback. Unlock the keyring and select **Retry** if unavailable.
+On Arch/Artix, the library packages are `qt6-base qtkeychain-qt6 qt6-wayland openssl libsodium libzip zxing-cpp protobuf`. A working Secret Service or KWallet is required to save or reopen imported accounts; there is no plaintext key fallback. Unlock the keyring and select **Retry** if unavailable.
 
 [Release instructions](docs/releases.md) cover Windows/macOS builds, bundled dependencies, AppImages, per-user NSIS installers, portable ZIPs, universal DMGs and the AUR source recipe. Packages are initially unsigned by a publisher. Linux amd64 has been built and smoke-tested locally; native Windows/macOS acceptance is still pending. See the release page for any published packages.
 
