@@ -52,7 +52,15 @@ Bring an authenticator export to your desktop and keep the code you need within 
 
 ## Download
 
-**[Aeris v0.1.0](https://github.com/Alex9001/Aeris/releases/tag/v0.1.0)** provides a locally built **Linux x86-64 AppImage**, with runtime libraries bundled. The release includes [checksums](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/SHA256SUMS), an SPDX SBOM, the matching source archive, and local build provenance.
+**[Aeris v0.1.0](https://github.com/Alex9001/Aeris/releases/tag/v0.1.0)** provides locally built **Artix x86-64 native pacman** and **Linux x86-64 AppImage** packages. The release includes [checksums](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/SHA256SUMS), SPDX SBOMs, the matching source archive, and local build records.
+
+**Artix Linux:** [download the native package](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/aeris-0.1.0-2-x86_64.pkg.tar.zst), then install it:
+
+```sh
+sudo pacman -U ./aeris-0.1.0-2-x86_64.pkg.tar.zst
+```
+
+Pacman installs any missing runtime libraries from standard Artix repositories. No compilation, build tools, AUR helper, or AppImage is required. Your existing KWallet can store Aeris credentials. This package targets an up-to-date Artix x86-64 installation; keep the system fully updated. It is a release download, not a package in Artix's official repositories.
 
 [Download the Linux AppImage →](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/aeris_linux_amd64.AppImage)
 

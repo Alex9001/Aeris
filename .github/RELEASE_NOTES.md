@@ -1,6 +1,14 @@
 Aeris is a native, offline viewer for phone authenticator exports. Your phone remains the source of truth.
 
-## Available package
+## Available packages
+
+**Artix x86-64 native pacman package**, built locally with standard Artix repository libraries. Download `aeris-0.1.0-2-x86_64.pkg.tar.zst` and install it:
+
+```sh
+sudo pacman -U ./aeris-0.1.0-2-x86_64.pkg.tar.zst
+```
+
+Pacman fetches any missing runtime dependencies from your standard Artix repositories. No compilation, compiler, CMake, Ninja, AUR helper, or AppImage is needed. Existing KWallet users can keep using KWallet. Use an up-to-date Artix x86-64 system; other distributions have not been verified for this native package. Package checks and dependency versions are in `build-provenance.artix.json`; its SBOM is `aeris_artix_x86_64.sbom.json`.
 
 **Linux x86-64 AppImage**, built locally on Ubuntu 24.04 with bundled Qt X11 and Wayland integrations. Windows, macOS and ARM binaries are not included in this release; their native builds and package acceptance remain pending.
 

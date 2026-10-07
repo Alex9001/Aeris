@@ -1,13 +1,13 @@
 # Maintainer: Aleksandr Oreshkin
 pkgname=aeris
 pkgver=@VERSION@
-pkgrel=1
+pkgrel=2
 pkgdesc='Native desktop viewer for phone authenticator exports'
 arch=('x86_64' 'aarch64')
 url='https://github.com/Alex9001/Aeris'
 license=('MIT')
-depends=('qt6-base' 'qtkeychain-qt6' 'openssl' 'libsodium' 'libzip' 'zxing-cpp' 'protobuf')
-makedepends=('cmake' 'ninja')
+depends=('glibc' 'libgcc' 'libstdc++' 'qt6-base' 'qtkeychain-qt6' 'openssl' 'libsodium' 'libzip' 'zxing-cpp' 'protobuf' 'abseil-cpp')
+makedepends=('cmake' 'ninja' 'pkgconf')
 optdepends=('qt6-wayland: Wayland platform integration')
 source=("https://github.com/Alex9001/Aeris/releases/download/v${pkgver}/aeris-v${pkgver}-source.tar.gz")
 sha256sums=('@SHA256@')
@@ -19,6 +19,16 @@ check() {
   QT_QPA_PLATFORM=offscreen ctest --test-dir build --output-on-failure
 }
 package() {
+  # These libraries encode release-specific ABIs in their SONAMEs. Make the
+  # binary package require the upstream versions it was built against.
+  for index in "${!depends[@]}"; do
+    case "${depends[index]}" in
+      protobuf|abseil-cpp|zxing-cpp)
+        read -r library version < <(pacman -Q "${depends[index]}")
+        depends[index]="$library=${version%-*}"
+        ;;
+    esac
+  done
   DESTDIR="$pkgdir" cmake --install build
   install -Dm644 "aeris-${pkgver}/LICENSE" "$pkgdir/usr/share/licenses/aeris/LICENSE"
 }

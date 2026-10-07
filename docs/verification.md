@@ -263,3 +263,38 @@ checksum are restored. A repeated redacted history scan reports only the same
 
 Windows, macOS and ARM binaries remain pending native builds and package
 acceptance. The published Linux build is unsigned and has no GitHub attestation.
+
+
+## Native Artix pacman package (2026-10-07 UTC)
+
+`aeris-0.1.0-2-x86_64.pkg.tar.zst` is a native package built locally from the
+unchanged, checksum-verified v0.1.0 source archive. The isolated Artix builder
+used only `system`, `world` and `galaxy`, GCC 16.2.1, Qt 6.11.2, QtKeychain
+0.17.0, ZXing 3.1.1 and protobuf 36.1. All six CTest suites passed (12.89 seconds).
+The package records build-time upstream versions for protobuf, Abseil and ZXing
+to reject incompatible library versions. Host packages were not changed.
+
+A separate clean Artix base container with KWallet installed accepted the
+package with `pacman -U`, fetching the eight missing library/transitive packages
+from `world`. GCC, G++, CMake, Ninja and Make remained absent. KWallet satisfied
+the Secret Service dependency without installing gnome-keyring. Package file
+integrity and desktop-file validation passed. All 30 files, eight icon sizes,
+licenses and notices were checked; the executable is an ELF binary with no
+build-directory RPATH, bundled shared libraries or AppImage. Its libraries all
+resolved against the system. X11/Xvfb and Wayland/headless Weston startup checks
+passed; missing optional cursor-theme diagnostics did not affect startup.
+
+The build's native credential probe passed write/read/delete and repeated
+synthetic encrypted-vault import/load/reorder/delete against the desktop's
+KWallet Secret Service (`ksecretd`). Every test credential was cleaned up.
+A synthetic previous-version package exercised pacman's upgrade from 0.1.0-1
+to 0.1.0-2. Removal deleted application files and left KWallet, a synthetic
+encrypted export and settings markers untouched in the isolated environment.
+Real user accounts and the real Aeris installation were not modified.
+
+The native package has a separate SPDX SBOM and `build-provenance.artix.json`
+with the exact source and packaging revisions, container identity, installed
+build packages, resolved external runtime library versions and acceptance
+checks. Native package acceptance covers up-to-date Artix x86-64 only. Rolling
+library ABI changes require rebuilding the package. GitHub Actions remained
+disabled; the package is unsigned and has no GitHub build attestation.
