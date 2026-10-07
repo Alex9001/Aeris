@@ -44,6 +44,12 @@ Bring an authenticator export to your desktop and keep the code you need within 
 | Clear feedback | Live countdowns, an inline copied checkmark, and clipboard clearing after 30 seconds |
 | Local storage | One encrypted collection secured by the system keyring; source exports remain untouched |
 
+## Video demo
+
+[Watch the 14-second demo](docs/media/aeris-demo-14s.mp4): the offline viewer, encrypted local collection, and native code-copying interface.
+
+[Video provenance and music license](docs/media/aeris-demo-14s.md).
+
 ## Quick start
 
 1. **Open Aeris.** Unlock your system keyring if prompted.
