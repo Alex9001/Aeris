@@ -2,7 +2,7 @@
 
 GitHub Actions are disabled to conserve quota and must only be enabled or run on explicit request. The retained workflows have no automatic push, pull-request, or tag triggers. Manual workflow dispatch builds a nonpublishing preflight; a manually requested run against a `v*` tag matching `CMakeLists.txt` can publish after its quality and packaging gates pass.
 
-The first public release is built locally. Its verified binary target is **Linux x86-64**, with the corresponding source archive, SPDX SBOM, checksums, source recipe and local build provenance.
+The first public release is built locally. Its verified binary targets are **Linux x86-64**, **Artix x86-64**, **Windows x64** and **Intel macOS**, with source archives, SPDX SBOMs, checksums and local build provenance. The platform matrix below also describes additional architectures that remain pending acceptance.
 
 | Platform | Outputs | Verification |
 | --- | --- | --- |
@@ -16,6 +16,60 @@ Linux release baseline is Ubuntu 24.04; both Qt XCB and Wayland plugins are expl
 Actions are pinned by commit. vcpkg's baseline is pinned in `vcpkg.json`. linuxdeploy's continuous artifacts are accepted only with the pinned SHA-256; if upstream replaces them, the workflow intentionally fails until hashes are reviewed. Apt dependencies follow Ubuntu security updates. Full binary reproducibility is not claimed.
 
 ## Local packaging
+
+### BuildLab Windows and macOS
+
+The local BuildLab at `/run/media/user/edat/VMs` provides verified native x64 builders.
+Run either platform independently, or both in sequence:
+
+```sh
+python3 scripts/build-local.py --target all
+python3 scripts/build-local.py --target windows-x64
+python3 scripts/build-local.py --target macos-x64
+```
+
+The driver checks BuildLab readiness and snapshots the current checkout, including
+uncommitted changes. `--buildlab PATH` (or `AERIS_BUILDLAB`) selects another lab;
+`--output PATH` selects an output directory. The default is `release-assets/`.
+Jobs allow six hours each and bounded ten-minute waits for the shared lock and RAM.
+Use `--timeout`, `--wait-lock`, and `--wait-memory` to change those limits.
+For debugging one VM target, `--keep` preserves the guest after completion;
+inspect it with BuildLab, then run `buildlab reset TARGET` before another build.
+
+Disposable guests install Qt 6.10.2 with aqtinstall 3.3.0, use the repository's pinned
+vcpkg baseline, and build QtKeychain at its pinned revision. SDKs, downloads and
+vcpkg binary packages persist under `BUILDLAB_CACHE/aeris`; the workstation and
+verified builder bases are not used for dependency installation. Syft 1.51.0 and
+portable NSIS 3.13 downloads are checked against pinned SHA-256 hashes.
+macOS also bootstraps pinned GNU m4/autoconf/automake/libtool and macro archives
+into the cache when the base image lacks vcpkg's autotools prerequisites.
+Native host tools use the target triplet, avoiding a duplicate protobuf build
+for macOS. The Mac triplet builds release dependencies only.
+The native driver defaults to two compiler jobs on Windows and one on the
+single-vCPU Mac builder.
+
+Windows produces `aeris_windows_amd64.zip`, `aeris_windows_amd64-setup.exe` and an
+SPDX SBOM. macOS produces `aeris_macos_x64.dmg`, a deployed app archive and an SPDX
+SBOM. Each target runs native CTest suites, the synthetic system-keychain/vault
+probe and package acceptance before its files are promoted to the output directory.
+macOS DMG verification includes Intel binary slices, ad-hoc signatures and launching
+the application from the mounted image with developer library/plugin paths removed.
+Its offscreen smoke plugin is explicitly deployed and relocated. Windows acceptance covers portable launch,
+installation, installed launch and removal while retaining unrelated files.
+Windows bundles the application-local MSVC redistributable DLLs and tests both
+offscreen and desktop launches with the developer SDK removed from PATH.
+It deploys the Qt Widgets SDK module directly so windeployqt does not confuse
+the independently built QtKeychain DLL with an SDK module.
+
+Per-platform local provenance identifies dependency pins, acceptance results and
+the BuildLab source snapshot/commit, resources and log. `local-builds.json` records
+the latest attempt per target; `SHA256SUMS` covers collected files. Failed attempts
+are retained under `failed/<target>/<run-id>/` and do not replace verified packages.
+A failed target does not prevent the other target from running. These commands build
+locally without running GitHub Actions or publishing a GitHub release. ARM runtime
+acceptance and publisher signing/notarization remain separate work.
+
+### Existing platform helpers
 
 Artix: use rootless Podman and the published source archive with its verified checksum:
 
@@ -45,4 +99,12 @@ Use **Delete all…** before uninstalling if you want to remove imported data an
 
 ## Release status
 
-The public `Alex9001/Aeris` repository publishes v0.1.0 with a locally verified Artix x86-64 native pacman package and Linux x86-64 AppImage. Windows, macOS and Linux ARM outputs remain pending native builds and package acceptance. The local results and remaining checks are recorded in `docs/verification.md`.
+Release notes begin with direct application download links. Installation help,
+features and technical details use closed `<details>` sections. Supporting
+attachments (SBOMs, build records, test results, verification reports, manifests,
+benchmarks and the Artix recipe) are bundled in `release-support.zip` to keep
+the Assets list focused on applications. Source archives and `SHA256SUMS`
+retain separate downloads; the support archive includes checksums for its
+contents. Follow this layout for future releases.
+
+The public `Alex9001/Aeris` repository publishes v0.1.0 with locally verified Artix x86-64 native pacman, Linux x86-64 AppImage, Windows x64 ZIP/installer and Intel macOS DMG/app-archive packages. The Windows and Mac additions pass native tests, credential/vault checks and package acceptance. Their build records identify a dirty checkout based on `fd5263eb23c54528a27da083a3a7fafc267c565e`, rather than the original release tag. `aeris-v0.1.0-native-source.tar.gz` captures that checkout after acceptance, including later release documentation; `native-source-manifest.json` distinguishes this publication snapshot from the transient build snapshots recorded in provenance. Existing Linux/source assets and the release tag are preserved. ARM outputs and a universal macOS package remain pending native builds and package acceptance. The results and remaining checks are recorded in `docs/verification.md`.

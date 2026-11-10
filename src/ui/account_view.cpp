@@ -142,6 +142,12 @@ void AccountView::keyPressEvent(QKeyEvent *event) {
         event->accept();
         return;
     }
+    if ((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) &&
+        event->modifiers() == Qt::NoModifier && currentIndex().isValid() && state() != EditingState) {
+        emit activated(currentIndex());
+        event->accept();
+        return;
+    }
     QListView::keyPressEvent(event);
 }
 void AccountView::focusOutEvent(QFocusEvent *event) {

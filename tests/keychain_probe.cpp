@@ -47,6 +47,10 @@ static void vaultRoundTrip() {
     std::puts("Synthetic vault import/load/reorder/delete passed across fresh worker threads.");
 }
 int main(int argc, char **argv) {
+#ifdef Q_OS_MACOS
+    // QtKeychain delivers Apple backend completions on the main dispatch queue.
+    qputenv("QT_EVENT_DISPATCHER_CORE_FOUNDATION", "1");
+#endif
     QCoreApplication app(argc, argv);
     app.setApplicationName("aeris-keychain-test");
     const bool unavailable = app.arguments().contains("--expect-unavailable");

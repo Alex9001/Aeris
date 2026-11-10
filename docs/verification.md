@@ -63,7 +63,7 @@ A repeat of the same reference benchmark observed warm startup **122, 123, 117, 
 
 ## Remaining release acceptance
 
-The Linux arm64 AppImage, both Windows installers/ZIPs, and universal macOS DMG have **not been built or executed locally**. Their native build, test, deployment, architecture and packaged smoke checks are configured in `release.yml` and must pass in a nonpublishing workflow dispatch before a release tag is published. Windows/macOS keychain prompts and native clipboard behavior still need interactive checks on those systems. No remote repository, release, AUR submission or website was created.
+Windows x64 installer/ZIP and Intel macOS DMG/app-archive packages now pass local native tests, real system-keychain/vault checks and packaged launches through BuildLab, as recorded below. The Linux arm64 AppImage, Windows arm64 installer/ZIP and universal macOS DMG have **not been built or executed locally**. Each additional architecture needs native build, test, deployment and packaged acceptance before publication. Publisher signing and macOS notarization also remain pending. GitHub Actions are disabled; local acceptance does not require a workflow dispatch. The accepted Windows and Intel Mac packages were subsequently added to the existing v0.1.0 release at the user's request.
 
 Synthetic compatibility tests are comprehensive for the implemented layouts, but do not replace user trials with current phone applications. Parser fuzzing is time-bounded and is not a security audit. OS swap, crash dumps and external clipboard managers are outside Aeris's memory/clipboard ownership guarantees; see the architecture document.
 
@@ -298,3 +298,117 @@ build packages, resolved external runtime library versions and acceptance
 checks. Native package acceptance covers up-to-date Artix x86-64 only. Rolling
 library ABI changes require rebuilding the package. GitHub Actions remained
 disabled; the package is unsigned and has no GitHub build attestation.
+
+## Native BuildLab Windows x64 (2026-10-10 UTC)
+
+The local Windows builder produced `aeris_windows_amd64.zip` and
+`aeris_windows_amd64-setup.exe` for Aeris 0.1.0 without GitHub Actions.
+Acceptance used Windows 11 Pro 26H2, build 26300.9457, MSVC 19.44.35229.0,
+Qt 6.10.2 and QtKeychain 0.17.0. The pinned vcpkg baseline supplied OpenSSL
+3.6.5, libsodium 1.0.22, libzip 1.11.4, ZXing 2.3.0 and protobuf 6.33.4.
+
+All five native CTest suites (core, import, storage, UI and order) passed in
+45.01 seconds in the final rebuild, including the Return/Enter correction below.
+The real Windows credential write/read/delete probe and repeated
+synthetic encrypted-vault import/load/reorder/delete passed. Packaging passed
+offscreen and native desktop launches from both an extracted ZIP and a silent
+per-user installation, with the developer SDK removed from PATH. Uninstall
+removed the application and retained an unrelated synthetic file.
+
+The portable ZIP includes application-local MSVC runtime DLLs, QtKeychain and
+both Windows and offscreen platform plugins. Its archive integrity and required
+files were checked after collection, and every collected SHA-256 checksum
+matched. Dependency notices, the SPDX SBOM, JUnit results and
+`build-provenance.local.windows_amd64.json` accompany the packages in
+`release-assets/`. Provenance identifies the source commit, dirty checkout
+snapshot hash, dependency pins, checks, resources and full BuildLab log
+(`20261010T035921Z-011547fc`). These are local unsigned packages; this work did
+not publish them or create a GitHub attestation. Windows acceptance covers x64
+on this Windows 11 builder; ARM remains untested.
+
+Early runs exposed stale NTFS cache state restored by the old Windows
+base's Fast Startup image. A fully shut down candidate replaced that base after
+native, desktop and power-cycle verification. The old base, cache backup and
+previous persistent desktop disk were preserved. Full shutdown now uses the
+interactive worker when SSH lacks shutdown rights. The refreshed persistent
+desktop cold-started and shut down successfully; subsequent disposable builders
+restored all 17 cached dependency packages in 13–14 seconds. No workstation
+reboot or host bootloader/kernel clock change was made.
+The final Windows rebuild also recovered a stopped desktop task before the
+queued job began. The controller now attempts one guarded task restart for
+that case, and all 34 controller tests pass. Native inspection confirms that
+the guard skips started jobs and healthy workers.
+
+## Native keyboard and keychain corrections (2026-10-10 UTC)
+
+The first Mac test run exposed a platform-specific Enter-to-copy failure:
+Qt's macOS list view treats Return/Enter as editing keys instead of emitting
+`activated`. Aeris now explicitly activates the selected account for an
+unmodified Return or Enter. The UI regression test activates its window,
+confirms keyboard focus, clears the clipboard before each key, and checks that
+each key emits exactly one activation, copies a code and starts copy feedback.
+The focused Mac test and all five Mac suites passed after this correction.
+
+QtKeychain 0.17.0 delivers Apple backend completions through the main dispatch
+queue. The console keychain probe now selects Qt's Core Foundation dispatcher
+on macOS. Real write/read/delete and repeated synthetic encrypted-vault cycles
+passed in the guest's GUI login session, including after locking its login
+keychain. No insecure credential fallback or application keychain logging was
+added.
+
+The shared keyboard handling also passes all six Linux Release CTest suites
+in 15.16 seconds with host Clang 23.1.1, Qt 6.12.0 and QtKeychain 0.17.0.
+Lizard 1.17.31 and clang-tidy pass the maintained-function complexity gates.
+These Linux checks cover the keyboard correction; they are not a new published
+Linux package or a repeat of the earlier sanitizer campaign.
+
+## Native BuildLab Intel macOS (2026-10-10 UTC)
+
+The final fresh Mac build produced `aeris_macos_x64.dmg` and
+`aeris_x64-osx-dynamic.app.tar.gz` for Aeris 0.1.0 without GitHub Actions or
+manual intervention in the guest. Acceptance used macOS 15.8.1 (24H32),
+Xcode 26.3, AppleClang 17.0.0.17000604, Qt 6.10.2 and QtKeychain 0.17.0,
+with a macOS 13.0 deployment target. The pinned vcpkg baseline supplied
+OpenSSL 3.6.5, libsodium 1.0.22, libzip 1.11.4, ZXing 2.3.0 and protobuf
+6.33.4.
+
+All five native CTest suites (core, import, storage, UI and order) passed in
+71.43 seconds. The real Keychain write/read/delete probe and repeated synthetic
+encrypted-vault import/load/reorder/delete passed in four seconds. Package
+acceptance verified every Mach-O's Intel slice, rejected unresolved or external
+non-system dylib paths, checked the bundle's ad-hoc signatures with strict deep
+verification, and launched the app both offscreen and with native Cocoa from
+the mounted DMG after removing developer library and plugin paths. The DMG
+verified and detached successfully.
+
+The collected app archive passed an integrity read and includes QtKeychain,
+Cocoa and offscreen plugins. Every collected SHA-256 checksum matched. The
+SPDX SBOM, JUnit results and `build-provenance.local.macos_x64.json` accompany
+the packages in `release-assets/`. Provenance identifies run
+`20261010T042240Z-da4aeb14`, source commit
+`fd5263eb23c54528a27da083a3a7fafc267c565e` with uncommitted changes, and snapshot
+SHA-256 `5064640bed583e6480e71e1e319f0ecc81294dc2f84fef7941d5a1635ea7feed`.
+
+An earlier two-vCPU guest panicked with a non-monotonic scheduler-time error.
+The final build used one guest vCPU, one compiler job and 8 GiB RAM while
+preserving the existing host CPU pin and memory headroom. No host bootloader
+or kernel clock setting changed and the workstation was not rebooted. Both
+disposable build instances were reset after successful collection; the shared
+lock is free and both persistent desktops are shut off. These are local
+packages without publisher signatures, notarization or GitHub attestations.
+Apple silicon and universal runtime acceptance remain untested.
+
+## Windows and Intel Mac release additions (2026-10-10 UTC)
+
+The accepted packages, SPDX SBOMs, native JUnit results and local build records
+were added to the existing GitHub v0.1.0 release. Existing Linux/Artix packages,
+their source archive and build records were preserved; release checksums and
+notes were extended for the new assets. GitHub Actions remained disabled.
+
+The native packages were built from a dirty checkout based on
+`fd5263eb23c54528a27da083a3a7fafc267c565e`, including the keyboard correction
+and local packaging changes above. The original v0.1.0 tag was not moved.
+`aeris-v0.1.0-native-source.tar.gz` is a separate publication snapshot captured
+after acceptance, including later release documentation. It is not byte-identical
+to the transient BuildLab archives whose hashes appear in build provenance.
+`native-source-manifest.json` records its files and hashes and the accepted runs.

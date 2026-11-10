@@ -520,6 +520,8 @@ void UiTest::copyAnimation() {
     store->replace(previewEntries());
     Window window([store] { return store; });
     window.show();
+    window.activateWindow();
+    QVERIFY(QTest::qWaitForWindowActive(&window));
     QSignalSpy ready(&window, &Window::collectionReady);
     window.load();
     QTRY_COMPARE(ready.count(), 1);
@@ -535,8 +537,20 @@ void UiTest::copyAnimation() {
     if (qEnvironmentVariableIsSet("AERIS_QA_DIR"))
         window.grab().save(qEnvironmentVariable("AERIS_QA_DIR") + "/copied.png");
     QTRY_VERIFY(!view->copyFeedbackActive());
+    view->setFocus();
+    QTRY_VERIFY(view->hasFocus());
+    QSignalSpy activated(view, &QListView::activated);
+    QApplication::clipboard()->clear();
     QTest::keyClick(view, Qt::Key_Return);
+    QCOMPARE(activated.count(), 1);
     QVERIFY(view->copyFeedbackActive());
+    QVERIFY(!QApplication::clipboard()->text().isEmpty());
+    QTRY_VERIFY(!view->copyFeedbackActive());
+    QApplication::clipboard()->clear();
+    QTest::keyClick(view, Qt::Key_Enter);
+    QCOMPARE(activated.count(), 2);
+    QVERIFY(view->copyFeedbackActive());
+    QVERIFY(!QApplication::clipboard()->text().isEmpty());
 }
 void UiTest::appearancePersistence() {
     QSettings().setValue("appearance/theme", "Paper");

@@ -9,7 +9,8 @@ if a.vcpkg:
     if status.exists():
         for paragraph in status.read_text().split('\n\n'):
             fields=dict(line.split(': ',1) for line in paragraph.splitlines() if ': ' in line)
-            if fields.get('Package') in metadata: metadata[fields['Package']]['version']=fields.get('Version','NOASSERTION')
+            name={'nu-book-zxing-cpp':'zxing-cpp'}.get(fields.get('Package'),fields.get('Package'))
+            if name in metadata and fields.get('Version'): metadata[name]['version']=fields['Version']
 packages=doc.setdefault('packages',[]); relationships=doc.setdefault('relationships',[])
 for name,info in metadata.items():
     ident='SPDXRef-Aeris-Dependency-'+name

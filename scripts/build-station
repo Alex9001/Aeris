@@ -1,0 +1,18 @@
+#!/bin/sh
+# Submit this checkout, including dirty source work, to the shared build station.
+set -eu
+repo=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd -P)
+station=${PROJECT_BUILDLAB:-/run/media/user/edat/VMs/buildlab}
+if [ "$#" -eq 0 ]; then
+    printf '%s\n' 'Usage: scripts/build-station --target TARGET [run options] -- COMMAND [ARG...]' >&2
+    exit 2
+fi
+if [ -n "${BUILDLAB_ARTIFACTS:-}" ]; then
+    printf '%s\n' 'Already running inside BuildLab; execute the build command directly.' >&2
+    exit 2
+fi
+if [ ! -x "$station" ]; then
+    printf 'Build station is unavailable: %s\n' "$station" >&2
+    exit 1
+fi
+exec "$station" run --repo "$repo" --wait-lock 120 --wait-memory 120 "$@"

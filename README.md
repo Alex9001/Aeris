@@ -52,7 +52,7 @@ Bring an authenticator export to your desktop and keep the code you need within 
 
 ## Download
 
-**[Aeris v0.1.0](https://github.com/Alex9001/Aeris/releases/tag/v0.1.0)** provides locally built **Artix x86-64 native pacman** and **Linux x86-64 AppImage** packages. The release includes [checksums](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/SHA256SUMS), SPDX SBOMs, the matching source archive, and local build records.
+**[Aeris v0.1.0](https://github.com/Alex9001/Aeris/releases/tag/v0.1.0)** provides locally built **Artix x86-64 native pacman**, **Linux x86-64 AppImage**, **Windows x64 installer/portable ZIP**, and **Intel macOS DMG** packages. The release includes [checksums](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/SHA256SUMS), SPDX SBOMs, source archives, and local build records.
 
 **Artix Linux:** [download the native package](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/aeris-0.1.0-2-x86_64.pkg.tar.zst), then install it:
 
@@ -64,7 +64,7 @@ Pacman installs any missing runtime libraries from standard Artix repositories. 
 
 [Download the Linux AppImage →](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/aeris_linux_amd64.AppImage)
 
-Make it executable with `chmod +x aeris_linux_amd64.AppImage`, then open it. If FUSE is unavailable, run `APPIMAGE_EXTRACT_AND_RUN=1 ./aeris_linux_amd64.AppImage`. The baseline is Ubuntu 24.04 or compatible newer Linux systems; a working system keyring is required. Windows, macOS, and ARM packages await native builds and verification.
+Make it executable with `chmod +x aeris_linux_amd64.AppImage`, then open it. If FUSE is unavailable, run `APPIMAGE_EXTRACT_AND_RUN=1 ./aeris_linux_amd64.AppImage`. The baseline is Ubuntu 24.04 or compatible newer Linux systems; a working system keyring is required. Windows users can download the [x64 installer](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/aeris_windows_amd64-setup.exe) or [portable ZIP](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/aeris_windows_amd64.zip) and launch `bin/aeris.exe` from the extracted ZIP. Intel Mac users can download the [DMG](https://github.com/Alex9001/Aeris/releases/download/v0.1.0/aeris_macos_x64.dmg) for macOS 13 or newer. These native packages passed tests, system-keychain checks and package verification; they have no publisher signature, and the Mac package is not notarized. ARM and universal macOS packages await native builds and verification.
 
 ## Quick start
 
@@ -147,7 +147,17 @@ ctest --test-dir build --output-on-failure
 
 On Arch/Artix, the library packages are `qt6-base qtkeychain-qt6 qt6-wayland openssl libsodium libzip zxing-cpp protobuf`. A working Secret Service or KWallet is required to save or reopen imported accounts; there is no plaintext key fallback. Unlock the keyring and select **Retry** if unavailable.
 
-[Release instructions](docs/releases.md) cover Windows/macOS builds, bundled dependencies, AppImages, per-user NSIS installers, portable ZIPs, universal DMGs and the AUR source recipe. Packages are initially unsigned by a publisher. Linux amd64 has been built and smoke-tested locally; native Windows/macOS acceptance is still pending. See the release page for any published packages.
+For local Windows x64 and Intel macOS packages using verified BuildLab builders:
+
+```sh
+python3 scripts/build-local.py --target all
+```
+
+The driver builds, tests and packages each native target, then collects verified
+outputs under `release-assets/`. [Release instructions](docs/releases.md) describe
+the lab path, caches, individual targets and acceptance checks, along with the
+existing Linux packaging and universal macOS helpers. Packages are unsigned by a
+publisher. See the release page for published packages.
 
 ## Documentation and development
 

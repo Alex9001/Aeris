@@ -1,6 +1,8 @@
 /build*/
 /out/
 /release-assets/
+/artifacts/
+/aqtinstall.log
 /.venv/
 *.user
 __pycache__/
